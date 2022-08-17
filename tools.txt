@@ -1,1 +1,3 @@
 android hooking watch class_method com.tencent.mm.plugin.appbrand.launching.AppBrandLaunchProxyUI.a  --dump-args --dump-backtrace --dump-return
+
+DebugSymbol.findFunctionsMatching("*appbr*").forEach(function(v){console.log(DebugSymbol.fromAddress(v))})
