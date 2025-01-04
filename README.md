@@ -17,3 +17,6 @@ $ npm run watch
 
 And use an editor like Visual Studio Code for code completion and instant
 type-checking feedback.
+
+安装 frida api 提示
+npm i  @types/frida-gum

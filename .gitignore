@@ -1,2 +1,5 @@
 /_agent.js
 /node_modules
+*.tmp
+*_fix.*
+ 
