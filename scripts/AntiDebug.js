@@ -476,7 +476,7 @@ function hookDlopen(target = "") {
                 this.matchFile = true;
                 console.log("AAssetManager_open onEnter",this.filename.readUtf8String())
                 
-                console.log('backtrace fopen .ihi:\n' + Thread.backtrace(this.context, Backtracer.FUZZY)
+                console.log('AAssetManager_open .ihi:\n' + Thread.backtrace(this.context, Backtracer.FUZZY)
                 .map(DebugSymbol.fromAddress).join('\n') + '\n');
                 // let sleep = new NativeFunction(Module.getExportByName('libc.so', 'sleep'), 'uint', ['uint'])
                 // sleep(100)
@@ -493,11 +493,11 @@ function hookOpenIhi(){
     var pth = Module.findExportByName(null,"fopen");
     Interceptor.attach(ptr(pth),{
         onEnter:function(args){
-            this.filename = args[0];
+            this.filename = args[0].readCString();
             
-            if (this.filename.readCString().indexOf("main.ihi") != -1){
+            if (this.filename.indexOf("main.ihi") != -1){
                 this.matchFile = true;
-                console.log("fopen onEnter",this.filename.readCString())
+                console.log("fopen onEnter",this.filename)
                 console.log('backtrace fopen .ihi:\n' + Thread.backtrace(this.context, Backtracer.ACCURATE)
                 .map(DebugSymbol.fromAddress).join('\n') + '\n');
                 // let sleep = new NativeFunction(Module.getExportByName('libc.so', 'sleep'), 'uint', ['uint'])
@@ -506,7 +506,7 @@ function hookOpenIhi(){
 
         },onLeave:function(retval){
             if(this.matchFile)
-                console.log("fopen onLeave",this.filename.readCString(), retval)
+                console.log("fopen onLeave",this.filename, retval)
             return retval;
         }
  })
@@ -531,9 +531,9 @@ function main(){
     // targetModule = "libmsaoaidsec.so"
     // setImmediate(hook_dlopen, targetModule)
     // hook_mmap()
-    hookOpenIhi()
+    // hookOpenIhi()
     hookAAssetManager_open()
-    hookLog()
+    // hookLog()
     // printStraceCommand()
     
     // setImmediate(() => {fakeMaps("/data/data/com.ihuman.imath/files/maps")})

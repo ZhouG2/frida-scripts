@@ -65,3 +65,10 @@ function printNativeStack(context) {
     console.log(Thread.backtrace(context, Backtracer.ACCURATE)
         .map(DebugSymbol.fromAddress).join('\n'));
 }
+
+function printJavaStackTrace(){
+    console.log('Java call stack:');
+    console.log(Java.use('android.util.Log')
+    .getStackTraceString(Java.use('java.lang.Exception').$new())
+    .toString());
+}

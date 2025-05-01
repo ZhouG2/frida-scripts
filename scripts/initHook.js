@@ -206,6 +206,28 @@ function get_addr_info(addr) {
     return `[${info.name} + ${addr.sub(info.base)}]`;
 }
 
+function hkxxtea(){
+  var addr = Module.findExportByName("libcocos2dlua.so", "_ZN7cocos2d8LuaStack14setHongenKAndSEPKciS2_i")
+  console.log("xxtea: " + addr);
+  // xxtea_decrypt(uchar *,uint,uchar *,uint,uint *)
+  if(addr){
+      Interceptor.attach(addr, {
+          onEnter: function(args) {
+              console.log("xxtea onEnter");
+              console.log("args: " + args);
+              console.log("args[0]: " + args[0].readCString());
+              console.log("args[1]: " + args[1]);
+              console.log("args[2]: " + args[2].readCString());
+              console.log("args[3]: " + args[3]);
+
+          },
+          onLeave: function(retval) {
+              console.log("xxtea onLeave");   
+          }
+      });
+  }
+}
+
 function hook_call_constructors() {
     let get_soname = null;
     let call_constructors_addr = null;
@@ -233,13 +255,12 @@ function hook_call_constructors() {
                 let soinfo = args[0];
                 let soname = get_soname(soinfo).readCString();
                 tell_init_info(soinfo, new NativeCallback((count, init_array_ptr, init_func) => {
-                    console.log(`[call_constructors] ${soname} count:${count}`);
-                    console.log(`[call_constructors] init_array_ptr:${init_array_ptr}`);
-                    console.log(`[call_constructors] init_func:${init_func} -> ${get_addr_info(init_func)}`);
-                    for (let index = 0; index < count; index++) {
-                        let init_array_func = init_array_ptr.add(Process.pointerSize * index).readPointer();
-                        let func_info = get_addr_info(init_array_func);
-                        console.log(`[call_constructors] init_array:${index} ${init_array_func} -> ${func_info}`);
+                    if(soname == "libcocos2dlua.so"){
+                        console.log(`[call_constructors] ${soname} count:${count}`);
+                        console.log(`[call_constructors] init_array_ptr:${init_array_ptr}`);
+                        console.log(`[call_constructors] init_func:${init_func} -> ${get_addr_info(init_func)}`);
+         
+                      hkxxtea();
                     }
                 }, "void", ["int", "pointer", "pointer"]));
             }

@@ -1,0 +1,7 @@
+[
+    {
+        "key": "ctrl+shift+t",
+        "command": "workbench.action.tasks.runTask",
+        "args": "copyFile(Windows)"
+    }
+] 

@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "copyFile(Windows)",
+            "type": "shell",
+            "command": "copy /Y ${file} F:\\data\\usr\\tmp\\",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "copyFile(Linux)",
+            "type": "shell",
+            "command": "cp -f ${file} /lamda/data/usr/tmp/",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+} 
